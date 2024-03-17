@@ -6,6 +6,7 @@ app = Flask(__name__)
 
 UPLOAD_FOLDER = 'uploads'
 PLOT_FOLDER = 'static/plots'
+SAMPLE_IMAGE_PATH = 'data/Cat.png' 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['PLOT_FOLDER'] = PLOT_FOLDER
 
@@ -35,6 +36,26 @@ def upload_file():
         
         return render_template('show_plots.html', plot_filenames=plot_filenames)
     return render_template('upload.html')
+
+@app.route('/load_sample', methods=['GET'])
+def load_sample():
+    if not os.path.exists(SAMPLE_IMAGE_PATH):
+        return 'Sample image not found', 404
+    
+    filename = os.path.join(app.config['UPLOAD_FOLDER'], 'sample.png')
+    # Assuming the sample image doesn't need to be saved again if it's already there
+    if not os.path.exists(filename):
+        os.rename(SAMPLE_IMAGE_PATH, filename)
+    
+    original_img, X_img, centroids, idx = compressor.compress_image(filename, K, MAX_ITERS)
+    plot_paths = compressor.generate_plots(X_img, centroids, idx, K, original_img)
+    plot_filenames = [os.path.basename(path) for path in plot_paths]
+    
+    return render_template('show_plots.html', plot_filenames=plot_filenames)
+
+@app.route('/data/<filename>')
+def static_file(filename):
+    return send_from_directory('data', filename)
 
 @app.route('/plots/<filename>')
 def serve_plot(filename):

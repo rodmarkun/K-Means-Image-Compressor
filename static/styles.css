@@ -20,3 +20,19 @@ input[type="submit"] {
 input[type="submit"]:hover {
     background-color: #45a049;
 }
+
+.image-description {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 14px;
+    color: #333;
+}
+
+.custom-image {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 700px; /* Set the width of the image */
+    height: auto; /* Auto-adjust the height to maintain aspect ratio */
+}
+

@@ -6,9 +6,21 @@
 </head>
 <body>
     <h1>K-Image Compressor</h1>
+    <!-- Image at the bottom of the page -->
+    <!-- Displaying the local image with description -->
+    <div style="margin-top: 20px;">
+        <p class="image-description">Compression clustering to 16 colors:</p>
+        <img src="{{ url_for('static_file', filename='example.png') }}" alt="Example Image" class="custom-image">
+    </div>
     <form action="/" method="post" enctype="multipart/form-data">
-        <input type="file" name="file" accept="image/png">
+        <input type="file" name="file" accept="image/png"><br>
+        <!-- Added a line break to ensure the button appears below the file input -->
         <input type="submit" value="Compress with K-Means!">
+    </form>
+    <br>
+    <!-- Load Sample Image Button -->
+    <form action="/load_sample" method="get">
+        <button type="submit">Load Sample Compression</button>
     </form>
 </body>
 </html>
