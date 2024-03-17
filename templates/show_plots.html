@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>K-Image Compressor - Results</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <h1>Compression Results</h1>
+    {% for plot_filename in plot_filenames %}
+        <div>
+            <img src="{{ url_for('serve_plot', filename=plot_filename) }}" alt="Plot">
+        </div>
+    {% endfor %}
+</body>
+</html>
