@@ -5,11 +5,15 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-    <h1>Compression Results</h1>
-    {% for plot_filename in plot_filenames %}
-        <div>
-            <img src="{{ url_for('serve_plot', filename=plot_filename) }}" alt="Plot">
-        </div>
-    {% endfor %}
+    <div class="container">
+        <h1>Compression Results</h1>
+        <!-- Actualiza el href para usar compressed_img_filename -->
+        <a href="{{ url_for('serve_compressed_image', filename=compressed_img_filename) }}" download>Download Compressed Image</a>
+        {% for plot_filename in plot_filenames %}
+            <div class="plot-container">
+                <img src="{{ url_for('serve_plot', filename=plot_filename, compression_folder=compressed_img_filename) }}" alt="Plot" class="custom-image">
+            </div>
+        {% endfor %}
+    </div>
 </body>
 </html>

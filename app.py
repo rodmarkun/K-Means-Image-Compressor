@@ -1,17 +1,17 @@
 from flask import Flask, render_template, request, send_from_directory
 import os
-import compressor # Make sure to implement this module
+import compressor
+from PIL import Image
+import constants
 
 app = Flask(__name__)
 
-UPLOAD_FOLDER = 'uploads'
-PLOT_FOLDER = 'static/plots'
-SAMPLE_IMAGE_PATH = 'data/Cat.png' 
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-app.config['PLOT_FOLDER'] = PLOT_FOLDER
+app.config['UPLOAD_FOLDER'] = constants.UPLOAD_FOLDER
+app.config['COMPRESSED_FOLDER'] = constants.COMPRESSED_FOLDER
+app.config['PLOT_FOLDER'] = constants.PLOT_FOLDER
 
 K = 16
-MAX_ITERS = 25
+MAX_ITERS = 10
 
 @app.route('/', methods=['GET', 'POST'])
 def upload_file():
@@ -24,45 +24,56 @@ def upload_file():
         
         filename = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
         file.save(filename)
+
+        with Image.open(filename) as img:
+            width, height = img.size
+            if width * height > constants.MAX_PIXELS_IMAGE:
+                os.remove(filename) 
+                return 'Image is too large. Please upload an image smaller than 4Mpx.'
         
         # Call the image compressor
-        original_img, X_img, centroids, idx = compressor.compress_image(filename, K, MAX_ITERS)
+        original_img, X_img, centroids, idx, compressed_filename = compressor.compress_image(filename, K, MAX_ITERS)
+        os.remove(filename)
         
         # Generate plots and get their paths
-        plot_paths = compressor.generate_plots(X_img, centroids, idx, K, original_img)
+        plot_paths = compressor.generate_plots(X_img, centroids, idx, K, original_img, compressed_filename)
         
         # Extract filenames from paths for web serving
         plot_filenames = [os.path.basename(path) for path in plot_paths]
         
-        return render_template('show_plots.html', plot_filenames=plot_filenames)
+        return render_template('show_plots.html', plot_filenames=plot_filenames, compressed_img_filename=compressed_filename)
     return render_template('upload.html')
 
 @app.route('/load_sample', methods=['GET'])
 def load_sample():
-    if not os.path.exists(SAMPLE_IMAGE_PATH):
+    if not os.path.exists(constants.SAMPLE_IMAGE_PATH):
         return 'Sample image not found', 404
     
     filename = os.path.join(app.config['UPLOAD_FOLDER'], 'sample.png')
-    # Assuming the sample image doesn't need to be saved again if it's already there
     if not os.path.exists(filename):
-        os.rename(SAMPLE_IMAGE_PATH, filename)
+        os.rename(constants.SAMPLE_IMAGE_PATH, filename)
     
-    original_img, X_img, centroids, idx = compressor.compress_image(filename, K, MAX_ITERS)
-    plot_paths = compressor.generate_plots(X_img, centroids, idx, K, original_img)
+    original_img, X_img, centroids, idx, compressed_filename = compressor.compress_image(filename, K, MAX_ITERS)
+    plot_paths = compressor.generate_plots(X_img, centroids, idx, K, original_img, compressed_filename)
     plot_filenames = [os.path.basename(path) for path in plot_paths]
     
-    return render_template('show_plots.html', plot_filenames=plot_filenames)
+    return render_template('show_plots.html', plot_filenames=plot_filenames, compressed_img_filename=compressed_filename)
 
 @app.route('/data/<filename>')
 def static_file(filename):
     return send_from_directory('data', filename)
 
 @app.route('/plots/<filename>')
-def serve_plot(filename):
-    return send_from_directory(app.config['PLOT_FOLDER'], filename)
+def serve_plot(filename, compression_folder):
+    return send_from_directory(app.config['PLOT_FOLDER'] + "/" + compression_folder + "/", filename)
+
+@app.route('/plots/compressed_image/<filename>')
+def serve_compressed_image(filename):
+    image_path = os.path.join(app.config['COMPRESSED_FOLDER'], filename)
+    return send_from_directory(app.config['COMPRESSED_FOLDER'], filename, as_attachment=True, mimetype='image/png')
 
 if __name__ == '__main__':
-    for folder in [UPLOAD_FOLDER, PLOT_FOLDER]:
+    for folder in [constants.UPLOAD_FOLDER, constants.PLOT_FOLDER]:
         if not os.path.exists(folder):
             os.makedirs(folder)
     app.run(debug=True)

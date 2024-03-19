@@ -1,38 +1,91 @@
+/* styles.css */
+
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Arial', sans-serif;
     text-align: center;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+.container {
+    max-width: 960px;
+    margin: auto;
+    padding: 20px;
+}
+
+h1 {
+    color: #333;
+}
+
+a {
+    display: inline-block;
     margin-top: 20px;
+    background-color: #008CBA;
+    color: white;
+    padding: 12px 28px;
+    text-decoration: none;
+    font-size: 16px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+a:hover {
+    background-color: #005f73;
 }
 
 input[type="file"] {
-    margin: 20px 0;
+    margin: 20px auto;
+    display: block;
 }
 
-input[type="submit"] {
+button, input[type="submit"] {
     background-color: #4CAF50;
     color: white;
-    padding: 12px 20px;
+    padding: 12px 28px;
     border: none;
-    border-radius: 4px;
+    border-radius: 5px;
     cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
 }
 
-input[type="submit"]:hover {
+button:hover, input[type="submit"]:hover {
     background-color: #45a049;
 }
 
 .image-description {
-    text-align: center;
     margin-top: 20px;
-    font-size: 14px;
+    font-size: 16px;
     color: #333;
 }
 
 .custom-image {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    width: 700px; /* Set the width of the image */
-    height: auto; /* Auto-adjust the height to maintain aspect ratio */
+    max-width: 100%;
+    height: auto;
+}
+
+@media (max-width: 768px) {
+    .custom-image {
+        width: 90%;
+    }
+}
+
+.plot-container {
+    text-align: center; /* Centra los elementos inline o inline-block dentro de este contenedor */
+    margin: 20px 0; /* Añade un poco de espacio arriba y abajo de cada contenedor de la imagen */
+}
+
+.custom-image {
+    max-width: 100%; /* Asegura que la imagen sea responsive y no exceda el ancho de su contenedor */
+    height: auto; /* Mantiene la proporción de aspecto de la imagen */
+    /* La clase ya está definida, solo asegúrate de que estas propiedades estén presentes */
+}
+
+@media (max-width: 768px) {
+    .custom-image {
+        width: 90%; /* Ajuste opcional para hacer que las imágenes sean un poco más pequeñas en pantallas estrechas */
+    }
 }
 
