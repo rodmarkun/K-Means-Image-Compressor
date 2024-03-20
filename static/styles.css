@@ -73,19 +73,33 @@ button:hover, input[type="submit"]:hover {
 }
 
 .plot-container {
-    text-align: center; /* Centra los elementos inline o inline-block dentro de este contenedor */
-    margin: 20px 0; /* Añade un poco de espacio arriba y abajo de cada contenedor de la imagen */
+    text-align: center; 
+    margin: 20px 0; 
 }
 
 .custom-image {
-    max-width: 100%; /* Asegura que la imagen sea responsive y no exceda el ancho de su contenedor */
-    height: auto; /* Mantiene la proporción de aspecto de la imagen */
-    /* La clase ya está definida, solo asegúrate de que estas propiedades estén presentes */
+    max-width: 100%; 
+    height: auto; 
 }
 
 @media (max-width: 768px) {
     .custom-image {
-        width: 90%; /* Ajuste opcional para hacer que las imágenes sean un poco más pequeñas en pantallas estrechas */
+        width: 90%; 
     }
 }
 
+.go-back-button {
+    display: inline-block;
+    margin-top: 20px;
+    background-color: #008CBA;
+    color: white;
+    padding: 12px 28px;
+    text-decoration: none;
+    font-size: 16px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.go-back-button:hover {
+    background-color: #005f73;
+}

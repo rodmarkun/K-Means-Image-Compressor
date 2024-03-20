@@ -7,13 +7,15 @@
 <body>
     <div class="container">
         <h1>Compression Results</h1>
-        <!-- Actualiza el href para usar compressed_img_filename -->
         <a href="{{ url_for('serve_compressed_image', filename=compressed_img_filename) }}" download>Download Compressed Image</a>
         {% for plot_filename in plot_filenames %}
             <div class="plot-container">
-                <img src="{{ url_for('serve_plot', filename=plot_filename, compression_folder=compressed_img_filename) }}" alt="Plot" class="custom-image">
+                <img src="{{ url_for('serve_plot', compression_folder=compressed_img_filename, filename=plot_filename) }}" alt="Plot" class="custom-image">
             </div>
         {% endfor %}
+        <div style="margin-top: 20px;">
+            <a href="/" class="go-back-button">Go Back</a>
+        </div>
     </div>
 </body>
 </html>
