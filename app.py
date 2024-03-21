@@ -37,6 +37,9 @@ def upload_file():
             os.remove(filename) 
             return 'Image is too large. Please upload an image smaller than 1Mpx.'
         
+        if not os.path.exists(constants.COMPRESSED_FOLDER):
+            os.makedirs(constants.COMPRESSED_FOLDER)
+        
         # Call the image compressor
         original_img, X_img, centroids, idx, compressed_filename, X_recovered = compressor.compress_image(filename, K, MAX_ITERS)
         os.remove(filename)
