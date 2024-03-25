@@ -48,8 +48,11 @@ def plot_kMeans_RGB(X, centroids):
     return fig
 
 def show_centroid_colors(centroids):
+    lum = 0.299 * centroids[:, 0] + 0.587 * centroids[:, 1] + 0.114 * centroids[:, 2]
+    sorted_centroids = centroids[np.argsort(lum)]
+
     fig, ax = plt.subplots(figsize=(8, 2))
-    palette = np.expand_dims(centroids, axis=0)
+    palette = np.expand_dims(sorted_centroids, axis=0)
     ax.imshow(palette)
     ax.set_xticks([])
     ax.set_yticks([])
