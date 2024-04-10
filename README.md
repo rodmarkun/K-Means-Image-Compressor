@@ -1,5 +1,8 @@
 # K-Means Image Compressor
 
+![Centroid Colors](https://github.com/rodmarkun/K-Means-Image-Compressor/assets/75074498/1c862d3a-a48a-4c71-8ea5-2ec6376191ba)
+
+
 ## Overview
 
 The K-Means Image Compressor is a straightforward Flask web application that employs the K-Means clustering algorithm for image compression. This tool allows users to reduce the color palette of images, thereby compressing them. In addition to providing a means for compression, the application also offers visualizations to help users understand the clustering process and the impact on the compressed image. A selection of sample images is included for quick testing.
