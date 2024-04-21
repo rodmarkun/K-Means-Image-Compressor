@@ -1,6 +1,6 @@
 # K-Means Image Compressor
 
-![Centroid Colors](https://github.com/rodmarkun/K-Means-Image-Compressor/assets/75074498/1c862d3a-a48a-4c71-8ea5-2ec6376191ba)
+![imagen](https://github.com/rodmarkun/K-Means-Image-Compressor/assets/75074498/3e612b47-92e7-49ad-89a3-5a2d798a659a)
 
 
 ## Overview
