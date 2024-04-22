@@ -1,7 +1,6 @@
 # K-Means Image Compressor
 
-![imagen](https://github.com/rodmarkun/K-Means-Image-Compressor/assets/75074498/3e612b47-92e7-49ad-89a3-5a2d798a659a)
-
+![imagen](https://github.com/rodmarkun/K-Means-Image-Compressor/assets/75074498/6ad89b44-61f8-4cb1-85b5-d4227fd205d9)
 
 ## Overview
 
