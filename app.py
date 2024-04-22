@@ -56,13 +56,10 @@ def upload_file():
         if not os.path.exists(constants.COMPRESSED_FOLDER):
             os.makedirs(constants.COMPRESSED_FOLDER)
         
-        # Compress the image and generate plots
-        original_img, X_img, centroids, idx, compressed_filename, X_recovered = compressor.compress_image(filename, K, MAX_ITERS)
+        original_img, X_img, centroids, idx, compressed_filename, X_recovered = compressor.compress_image(filename, constants.K, constants.MAX_ITERS)
         os.remove(filename)
         
-        plot_paths = compressor.generate_plots(X_img, centroids, idx, K, original_img, compressed_filename, X_recovered)
-        
-        # Prepare filenames for web serving
+        plot_paths = compressor.generate_plots(X_img, centroids, idx, constants.K, original_img, compressed_filename, X_recovered)
         plot_filenames = [os.path.basename(path) for path in plot_paths]
         
         return render_template('show_plots.html', plot_filenames=plot_filenames, compressed_img_filename=compressed_filename)
@@ -71,13 +68,11 @@ def upload_file():
 @app.route('/load_sample', methods=['GET'])
 def load_sample():
     """
-    Serve a compressed version of a sample image along with its plots.
-
-    This route randomly selects a sample image from a predefined directory, compresses it, and generates
-    the respective plots. It then renders an HTML template to display the compressed image and plots.
+    Handles the loading and display of a random sample image from a predefined directory. The image is processed
+    in the same way as uploaded images.
 
     Returns:
-        A rendered HTML template showing the plots ('show_plots.html') and the path to the compressed image.
+        Response: Renders a template to display the processed sample image and its generated plots.
     """
     if not os.path.exists(constants.SAMPLE_IMAGE_PATH) or not os.listdir(constants.SAMPLE_IMAGE_PATH):
         return 'Sample image not found', 404
@@ -90,8 +85,8 @@ def load_sample():
     sample_image_name = random.choice(files)
     filename = os.path.join(constants.SAMPLE_IMAGE_PATH, sample_image_name)
     
-    original_img, X_img, centroids, idx, compressed_filename, X_recovered = compressor.compress_image(filename, K, MAX_ITERS)
-    plot_paths = compressor.generate_plots(X_img, centroids, idx, K, original_img, compressed_filename, X_recovered)
+    original_img, X_img, centroids, idx, compressed_filename, X_recovered = compressor.compress_image(filename, constants.K, constants.MAX_ITERS)
+    plot_paths = compressor.generate_plots(X_img, centroids, idx, constants.K, original_img, compressed_filename, X_recovered)
     plot_filenames = [os.path.basename(path) for path in plot_paths]
     
     return render_template('show_plots.html', plot_filenames=plot_filenames, compressed_img_filename=compressed_filename)
@@ -99,40 +94,40 @@ def load_sample():
 @app.route('/data/<filename>')
 def static_file(filename):
     """
-    Serve a static file from the 'data' directory.
+    Serves static files from the 'data' directory.
 
     Parameters:
         filename (str): The name of the file to be served.
 
     Returns:
-        The requested file for download.
+        Response: Sends the requested file from the 'data' directory.
     """
     return send_from_directory('data', filename)
 
 @app.route('/plots/<compression_folder>/<filename>')
 def serve_plot(compression_folder, filename):
     """
-    Serve a plot file from a specified compression subfolder within the plot directory.
+    Serves generated plot images from their respective subdirectories within the plots directory.
 
     Parameters:
-        compression_folder (str): The subfolder name within the plot directory.
+        compression_folder (str): Subdirectory name where the requested plot is stored.
         filename (str): The name of the file to be served.
 
     Returns:
-        The requested plot file.
+        Response: Sends the requested plot image.
     """
     return send_from_directory(os.path.join(app.config['PLOT_FOLDER'], compression_folder), filename)
 
 @app.route('/plots/compressed_image/<filename>')
 def serve_compressed_image(filename):
     """
-    Serve a compressed image file.
+    Serves compressed image files, allowing them to be downloaded by the user.
 
     Parameters:
         filename (str): The name of the compressed image file to be served.
 
     Returns:
-        The requested compressed image file for download, with MIME type set to 'image/png'.
+        Response: Sends the requested compressed image file as an attachment.
     """
     image_path = os.path.join(app.config['COMPRESSED_FOLDER'], filename)
     return send_from_directory(app.config['COMPRESSED_FOLDER'], filename, as_attachment=True, mimetype='image/png')
